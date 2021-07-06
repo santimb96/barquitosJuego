@@ -1,13 +1,24 @@
 package barquitos;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Juego {
 
-    private String[][] matriz = new String[100][100];
+    private String[][] matriz = new String[50][50];
     private static ArrayList<String[]> listaMatriz = new ArrayList<>();
     private static ArrayList<String> opcionesSeleccionadas = new ArrayList<>();
+    private static ArrayList<String> historicoResultados = new ArrayList<>();
     private static Jugador jugador;
+    private static int turnos = 1;
+
+    public static ArrayList<String> getHistoricoResultados() {
+        return historicoResultados;
+    }
+
+    public static void setHistoricoResultados(ArrayList<String> historicoResultados) {
+        Juego.historicoResultados = historicoResultados;
+    }
 
     public Jugador getJugador() {
         return jugador;
@@ -41,6 +52,9 @@ public class Juego {
         this.matriz = matriz;
     }
 
+
+
+
     public void resultadoJugada(int numFila, int indiceLetra, int lineas, int columnasNumero, String letra) {
         var jugador = new Jugador();
         ArrayList<String[]> lista = getListaMatriz();
@@ -66,34 +80,46 @@ public class Juego {
                         System.out.println("Hundido!\n");
                         getJugador().setPuntuacion(getJugador().getPuntuacion() + 5);
                         getOpcionesSeleccionadas().add(numFila+letra);
+                        getHistoricoResultados().add(String.format("Turno %01d: Hundido", turnos));
+                        turnos++;
+                        break;
                     } else {
                         System.out.println("Agua!\n");
                         getJugador().setIntentos(getJugador().getIntentos() - 1);
                         getOpcionesSeleccionadas().add(numFila+letra);
+                        getHistoricoResultados().add(String.format("Turno %01d: Agua", turnos));
+                        turnos++;
+                        break;
                     }
                 }
             }
         }
 
         if(getJugador().getPuntuacion()==15){
-            devolverJugador("VICTORIA");
+            valorar("VICTORIA");
         }
         if(getJugador().getIntentos()==0){
-            devolverJugador("DERROTA");
+            valorar("DERROTA");
         }
     }
 
-    public void devolverJugador(String resultado){
-        var jugador = new Jugador();
+    public void valorar(String resultado){
         if(resultado.equals("VICTORIA")){
             System.out.println("Has ganado!\n");
-            System.out.println(getJugador().toString());
-            System.exit(0);
+            devolverJugador();
         } else if (resultado.equals("DERROTA")){
             System.out.println("Has perdido!\n");
-            System.out.println(getJugador().toString());
-            System.exit(0);
+            devolverJugador();
         }
 
+    }
+
+    private void devolverJugador() {
+        System.out.println(getJugador().toString());
+        System.out.println(getHistoricoResultados());
+        for (int i = 0; i < getListaMatriz().size(); i++) {
+            System.out.println(Arrays.deepToString(getListaMatriz().get(i)));
+        }
+        System.exit(0);
     }
 }

@@ -18,7 +18,7 @@ public class LecturaTablero {
         int lineas = 0;
         int columnas = 0;
 
-        String matriz[][] = new String[100][100];
+        String matriz[][] = new String[50][50];
 
         File archivo = new File("e:\\projects\\src\\java\\barquitosJuego\\src\\mapas\\mapa0.txt");
         try {
